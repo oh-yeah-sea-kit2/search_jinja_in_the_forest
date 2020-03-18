@@ -1,0 +1,41 @@
+version: '3'
+services:
+  db:
+    image: postgres:12.2
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: pgdata
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    user: root
+  web:
+    build: .
+    command: uvicorn app:app --host '0.0.0.0' --port 3000 --reload
+    ports:
+      - "3000:3000"
+    environment:
+      TZ: "Asia/Tokyo"
+      DATABASE_URL: "postgres://root:root@db:5432/pgdata?sslmode=disa    ble"
+    volumes:
+      - ./src:/myapp
+    depends_on:
+      - db
+  pgweb:
+    image: sosedoff/pgweb:0.11.6
+    restart: always
+    container_name: pgweb
+    ports:
+      - "8080:8081"
+    environment:
+      DATABASE_URL: "postgres://root:root@db:5432/pgdata?sslmode=disable"
+    depends_on:
+      - db
+volumes:
+  db:
+    external: false
+
