@@ -1,3 +1,6 @@
 # searchSurroundedByForestJinja
 
+## 現在開発環境構築中…
+- Dockerコンテナを変えたほうがいいかも…
+- ConohaVPSで動かすことを想定するとコンテナは別のもののほうが良さげ
 

@@ -1,5 +1,3 @@
-#FROM python:3.8
-#FROM tiangolo/uvicorn-gunicorn:python3.7
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.6
 
 RUN set -ex \
