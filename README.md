@@ -22,3 +22,5 @@
 ### コンテナログイン
 - make exec-tf
 
+### requirements.txtの生成
+- pipenv lock -r
