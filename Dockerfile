@@ -12,22 +12,13 @@ RUN yum update -y \
 
 WORKDIR $HOME
 
-# Anaconda install
-RUN pyenv install anaconda3-4.3.0 \
+# Pythoon3.6
+RUN pyenv install 3.6.10 \
     && pyenv rehash \
-    && pyenv global anaconda3-4.3.0 \
-    && echo 'export PATH="$PYENV_ROOT/versions/anaconda3-4.3.0/bin/:$PATH"' >> ~/.bashrc \
-    && source ~/.bashrc
+    && pyenv global 3.6.10
+ENV PATH $PYENV_ROOT/versions/3.6.10/bin:$PATH
 
 # TensorFlow install
-ENV PATH $PYENV_ROOT/versions/anaconda3-4.3.0/bin:$PATH
-ENV TF_BINARY_URL https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.0.1-cp36-cp36m-linux_x86_64.whl
-RUN conda update -y conda
-# RUN  conda create -n tensorflow python=3.6.0 \
-#     && source activate tensorflow \
-#     && pip install --upgrade pip \
-#     && pip install --ignore-installed --upgrade $TF_BINARY_URL
-
 RUN pip install --upgrade pip \
     && pip install astroid \
     && pip install pyqt5==5.12.0 \
@@ -39,16 +30,18 @@ RUN pip uninstall -y numpy \
     && pip install numpy
 
 # Pipenv install
-# ADD Pipfile $HOME/Pipfile
-# ADD Pipfile.lock $HOME/Pipfile.lock
-# RUN pip install --upgrade pip \
-#     && pip install pipenv \
-#     && pipenv install --system
+# export LC_ALL=en_US.UTF-8 # pipenvを動かすために必要
+ENV LC_ALL en_US.UTF-8
+ADD Pipfile $HOME/Pipfile
+ADD Pipfile.lock $HOME/Pipfile.lock
+RUN pip install pipenv
+RUN pipenv install --system
 
 # add to application
 ADD ./src $HOME/src
+ADD ./api $HOME/api
 ADD ./img $HOME/img
 
+WORKDIR $HOME/api
+
 # CMD uvicorn app:app --host 0.0.0.0 --port $PORT --reload
-
-
