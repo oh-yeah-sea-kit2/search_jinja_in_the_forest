@@ -8,4 +8,5 @@ services:
     volumes:
       - ./src:/root/src
       - ./img:/root/img
+      - ./api:/root/api
     tty: true
