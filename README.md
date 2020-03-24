@@ -24,3 +24,9 @@
 
 ### requirements.txtの生成
 - pipenv lock -r
+
+
+## 森判定のロジックイメージ
+![森判定アクティビティ図](./doc/out/activity_diagram/森の中の神社判定API.png)
+
+

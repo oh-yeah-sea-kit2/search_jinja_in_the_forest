@@ -1,0 +1,151 @@
+@startuml
+
+skinparam monochrome true
+title 森の中の神社判定API
+
+' ● 懸念点
+' ・APIのキー制限に引っかからないかどうか…
+' 	・Maxで叩いてしまった場合の計算をしよう
+' 	・件数 x 3=リクエスト数
+' ・森判定のモデルの学習量が不十分のとき、再学習必要。そのためのデータ収集の仕組み
+' 	・これは森じゃないっぽい神社のポイントデータがほしい。ユーザ報告の森じゃないデータを保持するDB
+
+
+start
+:緯度、経度をインプット;
+:取得高度[18,19,20];
+partition 航空写真を取得() {
+	if (航空写真のキャッシュがある) then (No)
+		:Yahoo APIより3高度の航空写真を取得;
+		if (2種類以上航空写真の高度が違うのに、データが同じである) then (Yes)
+			:Google APIより3高度の航空写真を取得;
+		else (No)
+		endif
+	else (Yes)
+		:キャッシュを返す;
+	endif
+}
+note right
+	// 航空写真のCache用データ構造
+	Key: 緯度経度({lat}-{lon})
+	Value: 
+		{
+			1: {
+				18: "./cache/{lat}-{lon}-18_google.jpg",
+				19: "./cache/{lat}-{lon}-19_google.jpg",
+				20: "./cache/{lat}-{lon}-20_google.jpg",
+				type: "google"
+			},
+			2: {
+				18: "./cache/{lat}-{lon}-18_yahoo.jpg",
+				19: "./cache/{lat}-{lon}-19_yahoo.jpg",
+				20: "./cache/{lat}-{lon}-20_yahoo.jpg",
+				type: "yahoo"
+			}
+		}
+		Value直下の番号は優先順位(Googleの方が有料だから優先度高い)
+end note
+
+:3つの高度[18,19,20]の航空写真に対して、森判定;
+
+if (3つ森) then (Yes)
+	:result : 3;
+	note right
+		detail: {
+			18: {
+				label: forest,
+				persent: 0.9,
+			},
+			19: {
+				label: forest,
+				persent: 0.9,
+			},
+			20: {
+				label: forest,
+				persent: 0.9,
+			},
+		}
+	end note
+else if (2つ森) then (Yes)
+	:result : 2;
+	note right
+		detail: {
+			18: {
+				label: forest,
+				persent: 0.9,
+			},
+			19: {
+				label: forest,
+				persent: 0.9,
+			},
+			20: {
+				label: forest,
+				persent: 0.9,
+			},
+		}
+	end note
+else if (1つ森) then (Yes)
+	:result : 1;
+	note right
+		detail: {
+			18: {
+				label: forest,
+				persent: 0.9,
+			},
+			19: {
+				label: forest,
+				persent: 0.9,
+			},
+			20: {
+				label: forest,
+				persent: 0.9,
+			},
+		}
+	end note
+else if (0つ森) then (Yes)
+	:result : 0;
+	note right
+		detail: {
+			18: {
+				label: forest,
+				persent: 0.9,
+			},
+			19: {
+				label: forest,
+				persent: 0.9,
+			},
+			20: {
+				label: forest,
+				persent: 0.9,
+			},
+		}
+	end note
+else (例外)
+	:result : null;
+	note right
+		detail: {
+			18: {
+				label: no_image,
+				persent: -,
+			},
+			19: {
+				label: not_judgment,
+				persent: -,
+			},
+			20: {
+				label: forest,
+				persent: 0.9,
+			},
+		}
+		・航空写真が取れないとき
+		・森判定が出来ないとき
+		・3つの高度でいずれかが欠測のとき
+	end note
+endif
+
+
+
+end
+
+
+@enduml
