@@ -14,8 +14,11 @@ run-no:
 	docker-compose build --no-cache
 	docker-compose up -d
 
-exec-tf:
+exec:
 	docker-compose exec tensorflow bash
+
+log:
+	docker-compose logs -f tensorflow
 
 #heroku run bash
 

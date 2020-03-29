@@ -2,7 +2,7 @@ version: '3'
 services:
   tensorflow:
     build: .
-    command: uvicorn app:app --host '0.0.0.0' --port 3000 --reload
+    command: uvicorn run:app --host '0.0.0.0' --port 3000 --reload
     ports:
       - "3000:3000"
     volumes:
