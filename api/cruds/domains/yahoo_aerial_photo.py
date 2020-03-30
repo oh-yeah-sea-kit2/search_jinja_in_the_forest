@@ -18,7 +18,7 @@ class YahooAerialPhoto:
     result_list = {}
     for zoom in zoom_list:
       res = self.get_aerial_photo(lat, lon, zoom, save_dir)
-      result_list[zoom] = res
+      result_list['zoom_{}'.format(zoom)] = res
     return result_list
   
   def get_aerial_photo(self, lat: float, lon: float, zoom: int, save_dir:str):
@@ -28,7 +28,7 @@ class YahooAerialPhoto:
       lon=str(lon),
       zoom=str(zoom),
     )
-    # print(url)
+    print(url)
     save_path = './data/cache/{}-{}-{}_{}.png'.format(
       self.float_zfill(lat), self.float_zfill(lon),
       zoom, 'yahoo'
@@ -40,6 +40,7 @@ class YahooAerialPhoto:
       with open(dst_path, mode="wb") as f:
         f.write(data)
     except urllib.error.URLError as e:
+      print('Download Error : ')
       print(e)
     return save_path
 

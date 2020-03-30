@@ -88,7 +88,12 @@ class ForestJudgment:
       if max_ratio <= results[i]:
         max_ratio = results[i]
         max_label = labels[i]
-    return {"max_label": max_label, "max_ratio": max_ratio}
+    res = {
+      "max_label": max_label,
+      "max_ratio": max_ratio,
+      "path": file_name
+    }
+    return res
 
   def judgment_in_the_forest(self, file_name):
     model_file = self.model_file

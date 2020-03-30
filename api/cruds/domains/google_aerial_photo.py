@@ -18,7 +18,7 @@ class GoogleAerialPhoto:
     result_list = {}
     for zoom in zoom_list:
       res = self.get_aerial_photo(lat, lon, zoom, save_dir)
-      result_list[zoom] = res
+      result_list['zoom_{}'.format(zoom)] = res
     return result_list
 
   def get_aerial_photo(self, lat: float, lon: float, zoom: int, save_dir: str):
@@ -43,7 +43,9 @@ class GoogleAerialPhoto:
       with open(dst_path, mode="wb") as f:
         f.write(data)
     except urllib.error.URLError as e:
+      print('Download Error : ')
       print(e)
+      # 本当はリトライ３回くらいしたいけどとりあえず
     return save_path
 
 

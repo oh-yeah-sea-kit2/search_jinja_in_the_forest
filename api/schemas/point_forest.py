@@ -16,8 +16,9 @@ class Coordinates(BaseModel):
     return v
 
 class ForestSearchDetail(BaseModel):
-  label: str
-  persent: float
+  max_label: str
+  max_ratio: float
+  path: str
 
 class ForestSearchDetailZoomNumber(BaseModel):
   zoom_18: ForestSearchDetail
@@ -26,7 +27,8 @@ class ForestSearchDetailZoomNumber(BaseModel):
 
 # search_jinja_in_the_forestの判定結果として返す構造体
 class ImageForestSearch(BaseModel):
-  result: int
+  level: int
+  error: str
   detail: ForestSearchDetailZoomNumber
 
 

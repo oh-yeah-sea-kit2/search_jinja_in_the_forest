@@ -1,9 +1,9 @@
 import os
 
-from google_aerial_photo import GoogleAerialPhoto
-from yahoo_aerial_photo import YahooAerialPhoto
-from judgment_in_the_forest import ForestJudgment
-from image_check import equal_image
+from .google_aerial_photo import GoogleAerialPhoto
+from .yahoo_aerial_photo import YahooAerialPhoto
+from .judgment_in_the_forest import ForestJudgment
+from .image_check import equal_image
 
 class PointForest:
   lat = None
@@ -38,27 +38,27 @@ class PointForest:
       if not os.path.isfile(save_dir + save_path):
         print('Get from YAHOO')
         photo = YahooAerialPhoto(YAHOO_API_KEY)
-        results = photo.get_all_aerial_photo(lat=lat,lon=lat, save_dir='../../')
+        results = photo.get_all_aerial_photo(lat=lat,lon=lat, save_dir=save_dir)
       if zoom == 18:
-        results[18] = save_dir + save_path
+        results['zoom_18'] = save_dir + save_path
       elif zoom == 19:
-        results[19] = save_dir + save_path
+        results['zoom_19'] = save_dir + save_path
       elif zoom == 20:
-        results[20] = save_dir + save_path
+        results['zoom_20'] = save_dir + save_path
       
     # ３つの高度の航空写真を確認（同一画像になっていないこと）
-    if equal_image(results[18], results[19]) or equal_image(results[18], results[20]):
+    if equal_image(results['zoom_18'], results['zoom_19']) or equal_image(results['zoom_18'], results['zoom_20']):
       print('Get from GOOGLE')
       # Googleから取得
       photo = GoogleAerialPhoto(GOOGLE_API_KEY)
-      results = photo.get_all_aerial_photo(lat=lat, lon=lat, save_dir='../../')
+      results = photo.get_all_aerial_photo(lat=lat, lon=lon, save_dir=save_dir)
     
-    if equal_image(results[18], results[19]) and equal_image(results[18], results[20]):
+    if equal_image(results['zoom_18'], results['zoom_19']) and equal_image(results['zoom_18'], results['zoom_20']):
       return {
         'error': 'all image same',
         'detail': results,
       }
-    elif equal_image(results[18], results[19]) or equal_image(results[18], results[20]):
+    elif equal_image(results['zoom_18'], results['zoom_19']) or equal_image(results['zoom_18'], results['zoom_20']):
       return {
         'error': 'two image same',
         'detail': results,
@@ -95,7 +95,11 @@ class PointForest:
       results = {
         'level': None,
         'error': photos['error'],
-        'detail': photos['detail'],
+        'detail': {
+          "zoom_18": {"max_label": "", "max_ratio": 0, "path": photos['detail']["zoom_18"],}, 
+          "zoom_19": {"max_label": "", "max_ratio": 0, "path": photos['detail']["zoom_19"]}, 
+          "zoom_20": {"max_label": "", "max_ratio": 0, "path": photos['detail']["zoom_20"]}
+        }
       }
       return results
     
@@ -107,6 +111,7 @@ class PointForest:
     result = self.judgment_forest_level(judg_results)
     results = {
       'level': result,
+      'error': '',
       'detail': judg_results
     }
     return results
