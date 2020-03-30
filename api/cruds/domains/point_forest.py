@@ -38,7 +38,7 @@ class PointForest:
       if not os.path.isfile(save_dir + save_path):
         print('Get from YAHOO')
         photo = YahooAerialPhoto(YAHOO_API_KEY)
-        results = photo.get_all_aerial_photo(lat=lat,lon=lat, save_dir=save_dir)
+        results = photo.get_all_aerial_photo(lat=lat,lon=lon, save_dir=save_dir)
       if zoom == 18:
         results['zoom_18'] = save_dir + save_path
       elif zoom == 19:
@@ -79,8 +79,8 @@ class PointForest:
   # ３高度に対して判定した結果からレベルを判定
   def judgment_forest_level(self, judg_results):
     forest_count = 0
-    for label, ratio in judg_results.items():
-      if label == 'forest':
+    for result in judg_results.values():
+      if result['max_label'] == 'forest':
         forest_count += 1
     return forest_count
 
