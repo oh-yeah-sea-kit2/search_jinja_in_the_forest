@@ -8,7 +8,8 @@ RUN yum update -y \
     && yum install -y gcc zlib-devel bzip2 bzip2-devel readline readline-devel sqlite sqlite-devel openssl openssl-devel git libffi-devel \
     && curl https://bootstrap.pypa.io/get-pip.py | python \
     && git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
-    && echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+    && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
+    && yum install -y libSM.x86_64 libXrender.x86_64 libXext.x86_64
 
 WORKDIR $HOME
 

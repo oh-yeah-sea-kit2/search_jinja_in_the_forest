@@ -18,7 +18,8 @@ exec:
 	docker-compose exec tensorflow bash
 
 log:
-	docker-compose logs -f tensorflow
+	docker logs -f search_jinja_in_the_forest_tensorflow_1
+	#docker-compose logs -f tensorflow
 
 #heroku run bash
 
