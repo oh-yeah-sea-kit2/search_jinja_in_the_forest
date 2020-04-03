@@ -45,4 +45,5 @@ ADD ./img $HOME/img
 
 WORKDIR $HOME/api
 
-# CMD uvicorn app:app --host 0.0.0.0 --port $PORT --reload
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT --reload
+

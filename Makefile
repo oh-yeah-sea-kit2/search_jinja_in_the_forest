@@ -1,4 +1,5 @@
-NAME=fastapi_docker
+#NAME=tensorflow
+NAME=web
 
 run:
 	docker-compose build
@@ -15,18 +16,19 @@ run-no:
 	docker-compose up -d
 
 exec:
-	docker-compose exec tensorflow bash
+	docker-compose exec $(NAME) bash
 
 log:
-	docker logs -f search_jinja_in_the_forest_tensorflow_1
-	#docker-compose logs -f tensorflow
+	docker logs -f search_jinja_in_the_forest_$(NAME)_1
+	#docker-compose logs -f $(NAME)
 
 #heroku run bash
 
 deploy:
-	heroku container:push web
-	heroku container:release web
+	heroku container:login
+	heroku container:push $(NAME)
+	heroku container:release $(NAME)
 
 logs:
-	heroku logs
+	heroku logs --tail
 
