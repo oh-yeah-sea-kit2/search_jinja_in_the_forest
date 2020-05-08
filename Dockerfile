@@ -36,7 +36,7 @@ ENV LC_ALL en_US.UTF-8
 ADD Pipfile $HOME/Pipfile
 ADD Pipfile.lock $HOME/Pipfile.lock
 RUN pip install pipenv
-RUN pipenv install --system
+RUN pipenv install --system --deploy --ignore-pipfile
 
 # add to application
 ADD ./src $HOME/src
@@ -45,5 +45,5 @@ ADD ./img $HOME/img
 
 WORKDIR $HOME/api
 
-CMD uvicorn main:app --host 0.0.0.0 --port $PORT --reload
-
+# CMD uvicorn main:app --host 0.0.0.0 --port $PORT --reload
+CMD gunicorn -k uvicorn.workers.UvicornWorker -c $HOME/api/config/gunicorn_conf.py main:app

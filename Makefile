@@ -18,7 +18,7 @@ run-no:
 exec:
 	docker-compose exec $(NAME) bash
 
-log:
+logs:
 	docker logs -f search_jinja_in_the_forest_$(NAME)_1
 	#docker-compose logs -f $(NAME)
 
@@ -29,6 +29,6 @@ deploy:
 	heroku container:push $(NAME)
 	heroku container:release $(NAME)
 
-logs:
+deploy-logs:
 	heroku logs --tail
 

@@ -17,6 +17,7 @@ pytest = "*"
 jinja2 = "*"
 python-dotenv = "*"
 opencv-python = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.6"
