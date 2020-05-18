@@ -1,7 +1,7 @@
 FROM centos:centos7
 
-ENV HOME /root
-ENV PYENV_ROOT $HOME/.pyenv
+ENV ROOT /root
+ENV PYENV_ROOT $ROOT/.pyenv
 ENV PATH $PYENV_ROOT/bin:$PATH
 RUN yum update -y \
     && yum install -y which \
@@ -11,7 +11,7 @@ RUN yum update -y \
     && echo 'eval "$(pyenv init -)"' >> ~/.bashrc \
     && yum install -y libSM.x86_64 libXrender.x86_64 libXext.x86_64
 
-WORKDIR $HOME
+WORKDIR $ROOT
 
 # Pythoon3.6
 RUN pyenv install 3.6.10 \
@@ -33,17 +33,17 @@ RUN pip uninstall -y numpy \
 # Pipenv install
 # export LC_ALL=en_US.UTF-8 # pipenvを動かすために必要
 ENV LC_ALL en_US.UTF-8
-ADD Pipfile $HOME/Pipfile
-ADD Pipfile.lock $HOME/Pipfile.lock
+ADD Pipfile $ROOT/Pipfile
+ADD Pipfile.lock $ROOT/Pipfile.lock
 RUN pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
 
 # add to application
-ADD ./src $HOME/src
-ADD ./api $HOME/api
-ADD ./img $HOME/img
+ADD ./src $ROOT/src
+ADD ./api $ROOT/api
+ADD ./img $ROOT/img
 
-WORKDIR $HOME/api
+WORKDIR $ROOT/api
 
 # CMD uvicorn main:app --host 0.0.0.0 --port $PORT --reload
-CMD gunicorn -k uvicorn.workers.UvicornWorker -c $HOME/api/config/gunicorn_conf.py main:app
+CMD gunicorn -k uvicorn.workers.UvicornWorker -c $ROOT/api/config/gunicorn_conf.py main:app

@@ -30,6 +30,11 @@
 ### requirements.txtの生成
 - pipenv lock -r
 
+## heroku
+
+### sshでサーバ接続
+- heroku git:remote --app search-forest-in-the-jinja
+- heroku run bash
 
 ## 森判定のロジックイメージ
 ![森判定アクティビティ図](./doc/out/activity_diagram/森の中の神社判定API.png)

@@ -9,12 +9,12 @@ host                 = os.getenv("HOST", "0.0.0.0")
 port                 = os.getenv("PORT", "80")
 bind_env             = os.getenv("BIND", None)
 use_loglevel         = os.getenv("LOG_LEVEL", "info")
-accesslog_var        = os.getenv("ACCESS_LOG", "-")
-errorlog_var         = os.getenv("ERROR_LOG", "-")
+accesslog_var        = os.getenv("ACCESS_LOG", "/tmp/access.log")
+errorlog_var         = os.getenv("ERROR_LOG", "/tmp/error.log")
 graceful_timeout_str = os.getenv("GRACEFUL_TIMEOUT", "120")
 timeout_str          = os.getenv("TIMEOUT", "120")
 keepalive_str        = os.getenv("KEEP_ALIVE", "5")
-
+root                 = os.getenv("ROOT", "/root")
 
 use_max_workers = None
 if max_workers_str:
@@ -50,6 +50,7 @@ graceful_timeout = int(graceful_timeout_str)
 timeout = int(timeout_str)
 keepalive = int(keepalive_str)
 
+logfile = use_bind = f"{root}/api/log/app.log"
 
 # For debugging and testing
 log_data = {
@@ -66,5 +67,6 @@ log_data = {
     "use_max_workers": use_max_workers,
     "host": host,
     "port": port,
+    "logfile": logfile,
 }
 print(json.dumps(log_data))

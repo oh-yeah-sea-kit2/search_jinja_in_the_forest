@@ -5,6 +5,8 @@ from .yahoo_aerial_photo import YahooAerialPhoto
 from .judgment_in_the_forest import ForestJudgment
 from .image_check import equal_image
 
+import time
+
 class PointForest:
   lat = None
   lon = None
@@ -104,6 +106,7 @@ class PointForest:
       return results
     
     for zoom, photo in photos.items():
+      # time.sleep(10)
       # 航空写真を機械学習判定
       judg_result = self.judgment_forest(photo, model_file, label_file)
       judg_results[zoom] = judg_result
